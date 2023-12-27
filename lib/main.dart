@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         title: 'Namer App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         ),
         home: MyHomePage(),
       ),
@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget page;
     switch (selectedIndex) {
       case 0:
-        page = GeneratorPage();
+        page = HomePage();
         break;
       case 1:
         page = FavoritesPage();
@@ -72,14 +72,16 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             SafeArea(
               child: NavigationRail(
+                indicatorColor: Colors.deepOrange[100],
+                backgroundColor: Color.fromARGB(43, 0, 0, 0),
                 extended: constraints.maxWidth > 500,
                 destinations: [
                   NavigationRailDestination(
-                    icon: Icon(Icons.home),
+                    icon: Icon(Icons.home_outlined),
                     label: Text('Home'),
                   ),
                   NavigationRailDestination(
-                    icon: Icon(Icons.favorite),
+                    icon: Icon(Icons.favorite_border),
                     label: Text('Favorites'),
                   ),
                 ],
@@ -93,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Expanded(
               child: Container(
-                color: Theme.of(context).colorScheme.primaryContainer,
+                color: Colors.grey[100],
                 child: page,
               ),
             ),
@@ -104,13 +106,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class GeneratorPage extends StatelessWidget {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     var pair = appState.current;
 
     IconData icon;
+
     if (appState.favorites.contains(pair)) {
       icon = Icons.favorite;
     } else {
@@ -132,12 +135,13 @@ class GeneratorPage extends StatelessWidget {
                 icon: Icon(icon),
                 label: Text('Like'),
               ),
-              SizedBox(width: 5),
-              ElevatedButton(
+              SizedBox(width: 10),
+              ElevatedButton.icon(
                 onPressed: () {
                   appState.getNext();
                 },
-                child: Text('Next'),
+                label: Text('Next'),
+                icon: Icon(Icons.skip_next_outlined),
               ),
             ],
           ),
@@ -186,7 +190,7 @@ class FavoritesPage extends StatelessWidget {
 
     if (appState.favorites.isEmpty) {
       return Center(
-        child: Text('No favorites yet.'),
+        child: Text('No Tienes Favoritos.'),
       );
     }
 
@@ -194,8 +198,8 @@ class FavoritesPage extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(20),
-          child: Text('You have '
-              '${appState.favorites.length} favorites:'),
+          child: Text('Tu tienes '
+              '${appState.favorites.length} favoritos:'),
         ),
         for (var pair in appState.favorites)
           ListTile(
